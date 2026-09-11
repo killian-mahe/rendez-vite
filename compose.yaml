@@ -1,0 +1,22 @@
+# Local stack: a Temporal development server and the Rendez-vite worker.
+# The development server keeps its data in memory; see docs/technique/installation-et-deploiement.md
+# before relying on it for long watches.
+services:
+  temporal:
+    image: temporalio/temporal:latest
+    command: ["server", "start-dev", "--ip", "0.0.0.0"]
+    ports:
+      - "7233:7233"
+      - "8233:8233"
+
+  worker:
+    build: .
+    image: rendez-vite:local
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      RENDEZ_VITE_TEMPORAL_ADDRESS: temporal:7233
+    depends_on:
+      - temporal
+    restart: unless-stopped
