@@ -31,6 +31,10 @@ LABEL org.opencontainers.image.title="rendez-vite" \
       org.opencontainers.image.description="Temporal worker watching a practitioner's availabilities" \
       org.opencontainers.image.licenses="0BSD"
 
+RUN apt-get update && apt-get install -y --only-upgrade libpcre2-8-0
+
+RUN /usr/local/bin/python -m pip uninstall -y pip
+
 RUN groupadd --system --gid 10001 app \
     && useradd --system --uid 10001 --gid app --no-create-home --home-dir /app app
 
