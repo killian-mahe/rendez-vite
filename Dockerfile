@@ -31,7 +31,8 @@ LABEL org.opencontainers.image.title="rendez-vite" \
       org.opencontainers.image.description="Temporal worker watching a practitioner's availabilities" \
       org.opencontainers.image.licenses="0BSD"
 
-RUN apt-get update && apt-get install -y libpcre2-8-0=10.42-1+deb12u1
+RUN apt-get update && apt-get install -y --no-install-recommends libpcre2-8-0=10.42-1+deb12u1
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN /usr/local/bin/python -m pip uninstall -y pip
 
