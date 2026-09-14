@@ -41,7 +41,7 @@ ENV PATH="/app/.venv/bin:${PATH}" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-USER app
+USER 10001:10001
 
 ENTRYPOINT ["rendez-vite"]
 CMD ["worker"]
