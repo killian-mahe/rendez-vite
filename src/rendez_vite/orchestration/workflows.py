@@ -166,8 +166,7 @@ class RendezViteWatchWorkflow:
             The slots announced during this check, empty when nothing matched or when a
             transient failure got in the way.
         """
-        criteria = self._criteria
-        assert criteria is not None  # noqa: S101 - set before the loop starts
+        criteria = self._current_criteria(request)
         reference = workflow.now()
         self._state.checks_done += 1
         self._last_check = reference
@@ -191,6 +190,22 @@ class RendezViteWatchWorkflow:
         self._state.seen_slot_ids = decision.seen_slot_ids
         self._state.notifications_sent += 1
         return decision.matches
+
+    def _current_criteria(self, request: WatchRequest) -> SearchCriteria:
+        """Return the criteria in force, including any update received by signal.
+
+        Parameters
+        ----------
+        request
+            The request of the current run, whose criteria apply until a signal replaces
+            them.
+
+        Returns
+        -------
+        SearchCriteria
+            The criteria to search with.
+        """
+        return self._criteria or request.criteria
 
     async def _fetch_slots(
         self, criteria: SearchCriteria, options: WatchOptions, reference: datetime
@@ -327,9 +342,8 @@ class RendezViteWatchWorkflow:
         WatchRequest
             The request to continue as new with.
         """
-        criteria = self._criteria or request.criteria
         return WatchRequest(
-            criteria=criteria,
+            criteria=self._current_criteria(request),
             recipient_email=request.recipient_email,
             options=request.options,
             state=self._state.copy(),
