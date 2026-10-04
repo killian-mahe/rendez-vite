@@ -32,7 +32,7 @@ LABEL org.opencontainers.image.title="rendez-vite" \
       org.opencontainers.image.licenses="0BSD"
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpcre2-8-0=10.42-1+deb12u1 \
+    && apt-get install -y --no-install-recommends libpcre2-8-0=10.42-1+deb12u2 \
     && rm -rf /var/lib/apt/lists/* \
     && /usr/local/bin/python -m pip uninstall -y pip \
     && groupadd --system --gid 10001 app \
